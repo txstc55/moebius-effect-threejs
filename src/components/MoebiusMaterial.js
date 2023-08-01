@@ -238,9 +238,9 @@ const fragmentShader = `
                         }
                     }
                 }
-                // if (pixelLuma > 0.75){
-                //     gl_FragColor = vec4(1.0);
-                // }
+                if (pixelLuma > 0.75){
+                    gl_FragColor = texture2D(tDiffuse, vUv) * 0.7 + vec4(240.0/255.0, 234.0/255.0, 214.0/255.0, 1.0) * 0.3;
+                }
             }
         }
         // gl_FragColor = texture2D(tDiffuse, vUv);
