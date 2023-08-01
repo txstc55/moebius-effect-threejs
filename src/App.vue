@@ -1,15 +1,14 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Moebius/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Moebius from './components/Moebius.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Moebius
   }
 }
 </script>
@@ -21,6 +20,16 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 95%;
+  margin: 0; 
+  height: 100%; 
+  overflow: hidden
+
 }
 </style>
