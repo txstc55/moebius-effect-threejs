@@ -119,17 +119,17 @@ scene.add(plane4);
 
 const loader = new STLLoader();
 loader.load(
-  "buser_head.stl",
+  "Fennec_Fox.stl",
   function (geometry) {
     const mesh = new THREE.Mesh(
       geometry,
       new THREE.MeshStandardMaterial({
         color: 0x00faca,
         emissive: 0x00faca,
-        emissiveIntensity: 0.1,
+        emissiveIntensity: 0.0,
       })
     );
-    mesh.scale.set(0.1, 0.1, 0.1);
+    mesh.scale.set(0.07, 0.07, 0.07);
     mesh.rotation.x = -Math.PI / 2;
     mesh.geometry.center();
     mesh.castShadow = true;
