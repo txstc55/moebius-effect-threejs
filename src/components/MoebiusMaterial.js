@@ -105,10 +105,11 @@ const fragmentShader = `
             // gl_FragColor =  texture2D(tDiffuse, vUv);
             vec4 normalColor = texture2D(uNormals, vUv);
 
-
             // now we make the texture
-            if (normalColor.x > 1.0 && normalColor.y > 1.0 && normalColor.z > 1.0){
+            if (normalColor.x > 2000.0 && normalColor.y > 2000.0 && normalColor.z > 2000.0){
                 gl_FragColor = vec4(240.0/255.0, 234.0/255.0, 214.0/255.0, 1.0);
+            }else if (normalColor.x > 100.0 && normalColor.y > 100.0 && normalColor.z > 100.0){
+                gl_FragColor = texture2D(tDiffuse, vUv) * 0.5 + vec4(240.0/255.0, 234.0/255.0, 214.0/255.0, 1.0) * 0.5;
             }else{
                 // we will also need to distort the texture a bit
                 float xDisp = ((1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 22.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 13.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 37.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 89.0)) * 1.5 / uResolution.x) / 4.0;

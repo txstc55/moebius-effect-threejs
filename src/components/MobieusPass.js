@@ -33,7 +33,7 @@ export class PencilLinesPass extends Pass {
             varying vec3 vWorldPosition;
         
             void main() {
-                vNormal = mat3(modelMatrix) * normal;
+                vNormal = normalize(mat3(modelMatrix) * normal);
                 vWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
                 gl_Position = projectionMatrix * (modelViewMatrix * vec4(position, 1.0));
             }
@@ -60,8 +60,8 @@ export class PencilLinesPass extends Pass {
                 float diff = max(dot(vNormal, lightDir), 0.0);
                 if (spec > 0.59){
                     gl_FragColor = vec4(100000.0, 100000.0, 100000.0, 1.0);
-                }else if (diff > 0.99){
-                    gl_FragColor = vec4(100000.0, 100000.0, 100000.0, 1.0);
+                }else if (diff > 0.95){
+                    gl_FragColor = vec4(2000.0, 2000.0, 2000.0, 1.0);
                 }else{
                     gl_FragColor = vec4(vNormal, 1.0);
                 }
