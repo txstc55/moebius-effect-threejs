@@ -127,7 +127,7 @@ const fragmentShader = `
 
 
                 vec2 vUvNew = vUv + vec2(xDisps[0], yDisps[0]);
-                gl_FragColor =  vec4(czm_saturation(texture2D(tDiffuse, vUvNew).xyz, 0.4), 1.0);
+                gl_FragColor =  vec4(czm_saturation(texture2D(tDiffuse, vUvNew).xyz, 0.3), 1.0);
 
                 vec4 pixelColor = texture2D(tDiffuse, vUvNew);
                 float pixelLuma = luma(pixelColor);
