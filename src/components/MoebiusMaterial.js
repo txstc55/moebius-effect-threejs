@@ -14,6 +14,7 @@ const fragmentShader = `
     uniform sampler2D tDiffuse;
     uniform vec2 uResolution;
     uniform sampler2D uNormals;
+    uniform float timerRandoms[32];
 
     varying vec2 vUv;
 
@@ -119,9 +120,10 @@ const fragmentShader = `
             }else{
                 // we will also need to distort the texture a bit
 
-                float xDisps[5] = float[](randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(22.0, 13.0, 37.0, 89.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(12.0, 13.0, 23.0, 73.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(11.0, 7.0, 17.0, 37.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(7.0, 19.0, 29.0, 83.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(8.0, 23.0, 39.0, 76.0)));
 
-                float yDisps[5] = float[](randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(22.0, 13.0, 37.0, 89.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(3.0, 13.0, 37.0, 61.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(17.0, 23.0, 29.0, 37.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(13.0, 19.0, 37.0, 89.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(17.0, 31.0, 48.0, 89.0)));
+                float xDisps[5] = float[](randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(22.0, 13.0, 37.0, 89.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(timerRandoms[0], timerRandoms[1], timerRandoms[2], timerRandoms[3])), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(timerRandoms[4], timerRandoms[5], timerRandoms[6], timerRandoms[7])), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(timerRandoms[8], timerRandoms[9], timerRandoms[10], timerRandoms[11])), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(timerRandoms[12], timerRandoms[13], timerRandoms[14], timerRandoms[15])));
+
+                float yDisps[5] = float[](randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(22.0, 13.0, 37.0, 89.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(timerRandoms[16], timerRandoms[17], timerRandoms[18], timerRandoms[19])), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(timerRandoms[20], timerRandoms[21], timerRandoms[22], timerRandoms[23])), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(timerRandoms[24], timerRandoms[25], timerRandoms[26], timerRandoms[7])), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(timerRandoms[28], timerRandoms[29], timerRandoms[30], timerRandoms[31])));
 
 
                 vec2 vUvNew = vUv + vec2(xDisps[0], yDisps[0]);
@@ -130,105 +132,105 @@ const fragmentShader = `
                 vec4 pixelColor = texture2D(tDiffuse, vUvNew);
                 float pixelLuma = luma(pixelColor);
                 if (pixelLuma <= 0.32){
-                    float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 14.7, 4.0);
+                    float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 17.7, 4.0);
                     if (stripe <= 1.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[1], yDisps[1]);
-                        if (mod(vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(vUvStripe.x * uResolution.x, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }else if (stripe <= 2.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
-                        if (mod(vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(vUvStripe.x * uResolution.x, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 3.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
-                        if (mod(vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(vUvStripe.x * uResolution.x, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 4.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[3], yDisps[3]);
-                        if (mod(vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(vUvStripe.x * uResolution.x, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                 }
                 if (pixelLuma <= 0.48){
-                    float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 14.7, 4.0);
+                    float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 17.7, 4.0);
                     if (stripe <= 1.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[1], yDisps[1]);
-                        if (mod(vUvStripe.y * uResolution.y, 14.7) <=1.5){
+                        if (mod(vUvStripe.y * uResolution.y, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }else if (stripe <= 2.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
-                        if (mod(vUvStripe.y * uResolution.y, 14.7) <=1.5){
+                        if (mod(vUvStripe.y * uResolution.y, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 3.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
-                        if (mod(vUvStripe.y * uResolution.y, 14.7) <=1.5){
+                        if (mod(vUvStripe.y * uResolution.y, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 4.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[3], yDisps[3]);
-                        if (mod(vUvStripe.y * uResolution.y, 14.7) <=1.5){
+                        if (mod(vUvStripe.y * uResolution.y, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                 }
                 if (pixelLuma <= 0.64){
-                    float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 14.7, 4.0);
+                    float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 17.7, 4.0);
                     if (stripe <= 1.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[1], yDisps[1]);
-                        if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }else if (stripe <= 2.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
-                        if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 3.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
-                        if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 4.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[3], yDisps[3]);
-                        if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                 }
                 if (pixelLuma <= 0.75){
-                    float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 14.7, 4.0);
+                    float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 17.7, 4.0);
                     if (stripe <= 1.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[1], yDisps[1]);
-                        if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }else if (stripe <= 2.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
-                        if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 3.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
-                        if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 17.7) <=1.5 + 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 4.0){
                         vec2 vUvStripe = vUv + vec2(xDisps[3], yDisps[3]);
-                        if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
+                        if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 17.7) <=1.5+ 0.5 * rand(vec2(vUv.x, vUv.y))){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
@@ -250,7 +252,7 @@ export class MoebiusMaterial extends THREE.ShaderMaterial {
             uniforms: {
                 tDiffuse: { value: null },
                 uNormals: { value: null },
-                timerRandoms: {value: null},
+                timerRandoms: {value: []},
                 uResolution: {
                     value: new THREE.Vector2(1, 1)
                 }

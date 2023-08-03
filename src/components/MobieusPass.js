@@ -9,6 +9,13 @@ export class PencilLinesPass extends Pass {
         this.camera = camera;
 
         this.material = new MoebiusMaterial();
+        this.randomNumbers = new Array(32);
+        for (var i = 0; i < 32; i++){
+            this.randomNumbers[i] = Math.random() * 90 + 7.0;
+        }
+        this.material.uniforms.timerRandoms.value = this.randomNumbers;
+        this.lastTime = Date.now();
+
         this.fsQuad = new FullScreenQuad(this.material);
         this.material.uniforms.uResolution.value = new THREE.Vector2(width, height);
 
@@ -93,6 +100,16 @@ export class PencilLinesPass extends Pass {
         this.scene.overrideMaterial = overrideMaterialBefore;
         this.material.uniforms.uNormals.value = this.normalBuffer.texture;
         this.material.uniforms.tDiffuse.value = readBuffer.texture;
+
+        // check passed time
+        var currentTime = Date.now();
+        if (currentTime - this.lastTime > 500){
+            for (var i = 0; i < 32; i++){
+                this.randomNumbers[i] = Math.random() * 90 + 7.0;
+            }
+            this.material.uniforms.timerRandoms.value = this.randomNumbers;
+            this.lastTime = Date.now();
+        }
 
 
         if (this.renderToScreen) {
