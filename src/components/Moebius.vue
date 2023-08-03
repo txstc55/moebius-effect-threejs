@@ -242,6 +242,12 @@ export default {
     );
     directionalLight.position.set(newLight.x, newLight.y, newLight.z);
     pencilLinePass.changeLight(newLight);
+
+    window.addEventListener("keypress", (event)=>{
+      if (event.key == " "){
+        controls.autoRotate = !controls.autoRotate;
+      }
+    })
   },
 };
 </script>
