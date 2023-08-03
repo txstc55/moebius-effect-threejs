@@ -118,6 +118,7 @@ const fragmentShader = `
                 gl_FragColor = texture2D(tDiffuse, vUv) * 0.5 + vec4(240.0/255.0, 234.0/255.0, 214.0/255.0, 1.0) * 0.5;
             }else{
                 // we will also need to distort the texture a bit
+
                 float xDisps[5] = float[](randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(22.0, 13.0, 37.0, 89.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(12.0, 13.0, 23.0, 73.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(11.0, 7.0, 17.0, 37.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(7.0, 19.0, 29.0, 83.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(8.0, 23.0, 39.0, 76.0)));
 
                 float yDisps[5] = float[](randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(22.0, 13.0, 37.0, 89.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(3.0, 13.0, 37.0, 61.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(17.0, 23.0, 29.0, 37.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(13.0, 19.0, 37.0, 89.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(17.0, 31.0, 48.0, 89.0)));
@@ -243,12 +244,13 @@ const fragmentShader = `
     }
 `
 
-export class PencilLinesMaterial extends THREE.ShaderMaterial {
+export class MoebiusMaterial extends THREE.ShaderMaterial {
     constructor() {
         super({
             uniforms: {
                 tDiffuse: { value: null },
                 uNormals: { value: null },
+                timerRandoms: {value: null},
                 uResolution: {
                     value: new THREE.Vector2(1, 1)
                 }

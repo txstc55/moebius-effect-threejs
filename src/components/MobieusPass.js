@@ -1,5 +1,5 @@
 import { Pass, FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass'
-import { PencilLinesMaterial } from './MoebiusMaterial'
+import { MoebiusMaterial } from './MoebiusMaterial'
 import * as THREE from 'three'
 
 export class PencilLinesPass extends Pass {
@@ -8,7 +8,7 @@ export class PencilLinesPass extends Pass {
         this.scene = scene;
         this.camera = camera;
 
-        this.material = new PencilLinesMaterial();
+        this.material = new MoebiusMaterial();
         this.fsQuad = new FullScreenQuad(this.material);
         this.material.uniforms.uResolution.value = new THREE.Vector2(width, height);
 
