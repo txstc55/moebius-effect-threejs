@@ -21,6 +21,12 @@ const fragmentShader = `
         return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
     }
 
+    float randDispl(float xCoord, float yCoord, float resolutionX, float resolutionY, float factor, vec4 randVariables){
+        float randNum = rand(vec2(xCoord, yCoord));
+        float disp = ((1.0 + randNum) * (sin(yCoord*resolutionY / randVariables.x)) * factor + (1.0 + randNum) * (sin(yCoord*resolutionY / randVariables.y)) * factor  + (1.0 + randNum) * (sin(yCoord*resolutionY / randVariables.z)) * factor  + (1.0 + randNum) * (sin(yCoord*resolutionY / randVariables.w)) * factor) / 4.0;
+        return disp;
+    }
+
     float valueAtPoint(sampler2D image, vec2 coord, vec2 texel, vec2 point) {
         vec3 luma = vec3(0.299, 0.587, 0.114);
         // here we have a rand so we have the pencil line effect
@@ -47,10 +53,8 @@ const fragmentShader = `
         // fetch the 3x3 neighbourhood of a fragment
 
         // first column
-        float xDisp = ((1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 22.0)) * 1.5 + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 13.0)) * 1.5 + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 37.0)) * 1.5 + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 89.0)) * 1.5) / 4.0;
-        float yDisp = ((1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 22.0)) * 1.5 + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 13.0)) * 1.5 + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 37.0)) * 1.5 + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 89.0)) * 1.5) / 4.0;
-        // float xDisp = 0.0;
-        // float yDisp = 0.0;
+        float xDisp = randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5, vec4(22.0, 13.0, 37.0, 89.0));
+        float yDisp = randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5, vec4(22.0, 13.0, 37.0, 89.0));
 
         float tx0y0 = getValue(-1.0+ xDisp, -1.0 + yDisp);
         float tx0y1 = getValue(-1.0+ xDisp, 0.0 + yDisp);
@@ -92,6 +96,8 @@ const fragmentShader = `
         return mix(intensity, rgb, adjustment);
     }
 
+
+
     void main() {
         float sobelValue = combinedSobelValue();
         sobelValue = smoothstep(0.01, 0.03, sobelValue);
@@ -112,8 +118,10 @@ const fragmentShader = `
                 gl_FragColor = texture2D(tDiffuse, vUv) * 0.5 + vec4(240.0/255.0, 234.0/255.0, 214.0/255.0, 1.0) * 0.5;
             }else{
                 // we will also need to distort the texture a bit
-                float xDisp = ((1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 22.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 13.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 37.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 89.0)) * 1.5 / uResolution.x) / 4.0;
-                float yDisp = ((1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 22.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 13.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 37.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 89.0)) * 1.5 / uResolution.y) / 4.0;
+                float xDisp = randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(22.0, 13.0, 37.0, 89.0));
+                float yDisp = randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(22.0, 13.0, 37.0, 89.0));
+                // float xDisp = ((1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 22.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 13.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 37.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 89.0)) * 1.5 / uResolution.x) / 4.0;
+                // float yDisp = ((1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 22.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 13.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 37.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 89.0)) * 1.5 / uResolution.y) / 4.0;
 
                 float xDisp1 = ((1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 12.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 13.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 23.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 73.0)) * 1.5 / uResolution.x) / 4.0;
                 float xDisp2 = ((1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 11.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 7.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 17.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 37.0)) * 1.5 / uResolution.x) / 4.0;
