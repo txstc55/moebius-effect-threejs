@@ -118,26 +118,12 @@ const fragmentShader = `
                 gl_FragColor = texture2D(tDiffuse, vUv) * 0.5 + vec4(240.0/255.0, 234.0/255.0, 214.0/255.0, 1.0) * 0.5;
             }else{
                 // we will also need to distort the texture a bit
-                float xDisp = randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(22.0, 13.0, 37.0, 89.0));
-                float yDisp = randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(22.0, 13.0, 37.0, 89.0));
-                // float xDisp = ((1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 22.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 13.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 37.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 89.0)) * 1.5 / uResolution.x) / 4.0;
-                // float yDisp = ((1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 22.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 13.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 37.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 89.0)) * 1.5 / uResolution.y) / 4.0;
+                float xDisps[5] = float[](randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(22.0, 13.0, 37.0, 89.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(12.0, 13.0, 23.0, 73.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(11.0, 7.0, 17.0, 37.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(7.0, 19.0, 29.0, 83.0)), randDispl(vUv.x, vUv.y, uResolution.x, uResolution.y, 1.5 / uResolution.x, vec4(8.0, 23.0, 39.0, 76.0)));
 
-                float xDisp1 = ((1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 12.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 13.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 23.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 73.0)) * 1.5 / uResolution.x) / 4.0;
-                float xDisp2 = ((1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 11.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 7.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 17.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 37.0)) * 1.5 / uResolution.x) / 4.0;
-                float xDisp3 = ((1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 12.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 13.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 23.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 73.0)) * 1.5 / uResolution.x) / 4.0;
-                float xDisp4 = ((1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 8.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 23.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 39.0)) * 1.5 / uResolution.x + (1.0 + rand(vUv)) * (sin(vUv.y*uResolution.y / 76.0)) * 1.5 / uResolution.x) / 4.0;
-
-                float yDisp1 = ((1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 3.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 13.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 37.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 63.0)) * 1.5 / uResolution.y) / 4.0;
-                float yDisp2 = ((1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 17.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 23.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 37.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 64.0)) * 1.5 / uResolution.y) / 4.0;
-                float yDisp3 = ((1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 3.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 19.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 37.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 89.0)) * 1.5 / uResolution.y) / 4.0;
-                float yDisp4 = ((1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 17.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 31.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 48.0)) * 1.5 / uResolution.y + (1.0 + rand(vec2(vUv.y, vUv.x))) * (sin(vUv.x*uResolution.x / 89.0)) * 1.5 / uResolution.y) / 4.0;
+                float yDisps[5] = float[](randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(22.0, 13.0, 37.0, 89.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(3.0, 13.0, 37.0, 61.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(17.0, 23.0, 29.0, 37.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(13.0, 19.0, 37.0, 89.0)), randDispl(vUv.y, vUv.x, uResolution.y, uResolution.x, 1.5 / uResolution.y, vec4(17.0, 31.0, 48.0, 89.0)));
 
 
-
-                // float xDisp = 0.0;
-                // float yDisp = 0.0;
-                vec2 vUvNew = vUv + vec2(xDisp, yDisp);
+                vec2 vUvNew = vUv + vec2(xDisps[0], yDisps[0]);
                 gl_FragColor =  vec4(czm_saturation(texture2D(tDiffuse, vUvNew).xyz, 0.4), 1.0);
 
                 vec4 pixelColor = texture2D(tDiffuse, vUvNew);
@@ -145,24 +131,24 @@ const fragmentShader = `
                 if (pixelLuma <= 0.32){
                     float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 14.7, 4.0);
                     if (stripe <= 1.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp1, yDisp1);
+                        vec2 vUvStripe = vUv + vec2(xDisps[1], yDisps[1]);
                         if (mod(vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }else if (stripe <= 2.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp2, yDisp2);
+                        vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
                         if (mod(vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 3.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp2, yDisp2);
+                        vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
                         if (mod(vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 4.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp3, yDisp3);
+                        vec2 vUvStripe = vUv + vec2(xDisps[3], yDisps[3]);
                         if (mod(vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
@@ -171,24 +157,24 @@ const fragmentShader = `
                 if (pixelLuma <= 0.48){
                     float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 14.7, 4.0);
                     if (stripe <= 1.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp1, yDisp1);
+                        vec2 vUvStripe = vUv + vec2(xDisps[1], yDisps[1]);
                         if (mod(vUvStripe.y * uResolution.y, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }else if (stripe <= 2.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp2, yDisp2);
+                        vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
                         if (mod(vUvStripe.y * uResolution.y, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 3.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp2, yDisp2);
+                        vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
                         if (mod(vUvStripe.y * uResolution.y, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 4.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp3, yDisp3);
+                        vec2 vUvStripe = vUv + vec2(xDisps[3], yDisps[3]);
                         if (mod(vUvStripe.y * uResolution.y, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
@@ -197,24 +183,24 @@ const fragmentShader = `
                 if (pixelLuma <= 0.64){
                     float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 14.7, 4.0);
                     if (stripe <= 1.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp1, yDisp1);
+                        vec2 vUvStripe = vUv + vec2(xDisps[1], yDisps[1]);
                         if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }else if (stripe <= 2.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp2, yDisp2);
+                        vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
                         if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 3.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp2, yDisp2);
+                        vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
                         if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 4.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp3, yDisp3);
+                        vec2 vUvStripe = vUv + vec2(xDisps[3], yDisps[3]);
                         if (mod(-vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
@@ -223,24 +209,24 @@ const fragmentShader = `
                 if (pixelLuma <= 0.75){
                     float stripe = mod((vUv.y * uResolution.y + vUv.x * uResolution.x) / 14.7, 4.0);
                     if (stripe <= 1.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp1, yDisp1);
+                        vec2 vUvStripe = vUv + vec2(xDisps[1], yDisps[1]);
                         if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }else if (stripe <= 2.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp2, yDisp2);
+                        vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
                         if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 3.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp2, yDisp2);
+                        vec2 vUvStripe = vUv + vec2(xDisps[2], yDisps[2]);
                         if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
                     }
                     else if (stripe <= 4.0){
-                        vec2 vUvStripe = vUv + vec2(xDisp3, yDisp3);
+                        vec2 vUvStripe = vUv + vec2(xDisps[3], yDisps[3]);
                         if (mod(vUvStripe.y * uResolution.y + vUvStripe.x * uResolution.x, 14.7) <=1.5){
                             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                         }
