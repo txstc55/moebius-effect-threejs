@@ -108,15 +108,13 @@ const fragmentShader = `
         if (sobelValue > 0.1) {
             gl_FragColor = lineColor;
         } else {
-            // gl_FragColor = vec4(1.0);
-            // gl_FragColor =  texture2D(tDiffuse, vUv);
             vec4 normalColor = texture2D(uNormals, vUv);
 
             // now we make the texture
             if (normalColor.x > 2000.0 && normalColor.y > 2000.0 && normalColor.z > 2000.0){
                 gl_FragColor = vec4(240.0/255.0, 234.0/255.0, 214.0/255.0, 1.0);
             }else if (normalColor.x > 100.0 && normalColor.y > 100.0 && normalColor.z > 100.0){
-                gl_FragColor = texture2D(tDiffuse, vUv) * 0.5 + vec4(240.0/255.0, 234.0/255.0, 214.0/255.0, 1.0) * 0.5;
+                gl_FragColor = vec4(czm_saturation((texture2D(tDiffuse, vUv) * 0.5 + vec4(240.0/255.0, 234.0/255.0, 214.0/255.0, 1.0) * 0.5).xyz, 0.4), 1.0);
             }else{
                 // we will also need to distort the texture a bit
 
@@ -236,13 +234,10 @@ const fragmentShader = `
                     }
                 }
                 if (pixelLuma > 0.75){
-                    gl_FragColor = texture2D(tDiffuse, vUv) * 0.7 + vec4(240.0/255.0, 234.0/255.0, 214.0/255.0, 1.0) * 0.3;
+                    gl_FragColor = vec4(czm_saturation((texture2D(tDiffuse, vUv) * 0.7 + vec4(240.0/255.0, 234.0/255.0, 214.0/255.0, 1.0) * 0.3).xyz, 0.4), 1.0);
                 }
             }
         }
-        // gl_FragColor = texture2D(tDiffuse, vUv);
-        // gl_FragColor = texture2D(uNormals, vUv);
-        // gl_FragColor = vec4((sin(vUv.y*uResolution.y / 8.0) +1.0)/2.0, (sin(vUv.y*uResolution.y / 8.0) +1.0)/2.0, (sin(vUv.y*uResolution.y / 8.0) +1.0)/2.0, 1.0);
     }
 `
 
