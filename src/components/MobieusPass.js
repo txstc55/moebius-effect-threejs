@@ -103,9 +103,9 @@ export class PencilLinesPass extends Pass {
 
         // check passed time
         var currentTime = Date.now();
-        if (currentTime - this.lastTime > 500){
+        if (currentTime - this.lastTime > 1000){
             for (var i = 0; i < 32; i++){
-                this.randomNumbers[i] = Math.random() * 90 + 7.0;
+                this.randomNumbers[i] = Math.random() * 40.0 + 7.0;
             }
             this.material.uniforms.timerRandoms.value = this.randomNumbers;
             this.lastTime = Date.now();
